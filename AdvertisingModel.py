@@ -61,8 +61,8 @@ def optimize_budget_func(input_data: OptimizationInput):
 
     if model.status == GRB.OPTIMAL:
         optimal_allocations = [budget_vars[i].x for i in range(num_channels)]
-        total_profit = model.objVal
-        return optimal_allocations, total_profit
+        total_revenue = model.objVal
+        return optimal_allocations, total_revenue
     else:
         return None, None
 
@@ -79,9 +79,9 @@ if __name__ == "__main__":
         max_cost_percent=0.80
     )
 
-    allocations, profit = optimize_budget_func(input_data)
+    allocations, revenue = optimize_budget_func(input_data)
     if allocations is not None:
         print("Optimal Budget Allocations:", allocations)
-        print("Total Profit:", profit)
+        print("Total Revenue:", revenue)
     else:
         print("No solution found.")
