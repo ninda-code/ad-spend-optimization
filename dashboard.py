@@ -36,7 +36,7 @@ with st.sidebar:
     min_clicks = st.slider('Minimum Clicks', 5000, 15000, 7000)
     max_cost_percent = st.slider('Maximum Cost Percentage', 50, 90, 80) / 100
     
-
+# Parse input
 if st.sidebar.button('Optimize'):
     # Parse input data
     conversion_rates = str_to_2darray(conversion_rates)
@@ -54,10 +54,10 @@ if st.sidebar.button('Optimize'):
         max_cost_percent=max_cost_percent
     )
    
-
     # Run optimization
     allocations, revenue = optimize_budget_func(input_data)
 
+    # Process outcome
     if allocations is not None:
         results = {
         'Channel': [],
@@ -103,27 +103,27 @@ if st.sidebar.button('Optimize'):
         summary_df = pd.DataFrame(results)
         formatted_df = pd.DataFrame(summary_df[['Channel','Budget','Clicks','Transactions','Revenue']]).style.format(precision=2, thousands=",", decimal=".") 
 
+        # Show key metrics
         metric_val = [total_revenue,total_budget_allocated,total_revenue/total_budget_allocated]
         metric_name = ["Total Revenue","Total Ad Spend","ROAS"]
         metric_col = st.columns(3)
         for c in range(2):
             metric_col[c].metric(metric_name[c], "$ {:,.2f}".format(metric_val[c]))
         metric_col[2].metric(metric_name[2], "{:,.2f}".format(metric_val[2]))
-
-
-        ## st.subheader("Budget Allocation by Channel")
+        
+        # Show budget by channel
         budget_col = st.columns(3)
         for c in range(3):
             budget_col[c].metric(f'Channel {c + 1} Budget', "$ {:,.2f}".format(allocations[c]))
         
         st.divider()
         
+        # Show performance by channel
         st.subheader("ROAS by Channel")
         roas_col = st.columns(3)
         for c in range(3):
             roas_col[c].metric(f'Channel {c + 1}', "{:,.2f}".format(summary_df['ROAS'][c]))
 
-        
         st.subheader("Channel Performance")
         df_plot = pd.melt(summary_df[['Channel','Budget %','Clicks %','Transactions %','Revenue %']],id_vars='Channel',var_name='Metrics', value_name='Value')
         fig = px.bar(df_plot, x="Channel", color="Metrics",
