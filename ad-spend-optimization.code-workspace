@@ -5,6 +5,12 @@
 		},
 		{
 			"path": "../Ad Spend Opitmization - Draft"
+		},
+		{
+			"path": "../coffee-shop-simulation"
+		},
+		{
+			"path": "../pandas-data-filtering"
 		}
 	],
 	"settings": {}
